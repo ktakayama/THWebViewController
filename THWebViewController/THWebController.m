@@ -268,6 +268,12 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
   _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:
                    UIBarButtonSystemItemAction target:self action:@selector(shareAction)];
 
+  UIBarButtonItem *fixedSpace =
+  [[[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace
+                                                 target: nil
+                                                 action: nil] autorelease];
+  fixedSpace.width = 10;
+
   UIBarItem* flexibleSpace =
   [[[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace
                                                  target: nil
@@ -277,6 +283,7 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
                     _backButton,
                     flexibleSpace,
                     _forwardButton,
+                    fixedSpace,
                     flexibleSpace,
                     _refreshButton,
                     flexibleSpace,
