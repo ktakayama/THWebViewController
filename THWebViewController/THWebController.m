@@ -78,6 +78,7 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
   NI_RELEASE_SAFELY(_actionSheet);
   NI_RELEASE_SAFELY(_webView);
   NI_RELEASE_SAFELY(_toolbar);
+  NI_RELEASE_SAFELY(_titleLabel);
   NI_RELEASE_SAFELY(_backButton);
   NI_RELEASE_SAFELY(_forwardButton);
   NI_RELEASE_SAFELY(_refreshButton);
@@ -304,6 +305,24 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
         subScrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
     }
   [self.view addSubview:_webView];
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void) viewDidLoad {
+   [super viewDidLoad];
+   UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 400, 40)];
+   label.backgroundColor = [UIColor clearColor];
+   label.font = [UIFont boldSystemFontOfSize:12.0];
+   label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+   label.textColor = [UIColor whiteColor];
+   label.textAlignment = UITextAlignmentCenter;
+   label.minimumFontSize = 8.0f;
+   label.numberOfLines = 2;
+   label.text = self.title;
+   self.navigationItem.titleView = label;
+   _titleLabel = [label retain];
+   [label release];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -377,7 +396,6 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)webViewDidStartLoad:(UIWebView*)webView {
 
-  self.title = NSLocalizedString(@"Loading...", @"");
   if (!self.navigationItem.rightBarButtonItem) {
     [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
   }
@@ -401,6 +419,7 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
 
   NI_RELEASE_SAFELY(_loadingURL);
   self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+  _titleLabel.text = self.title;
   if (self.navigationItem.rightBarButtonItem == _activityItem) {
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
   }
@@ -473,7 +492,9 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
 - (void)openRequest:(NSURLRequest*)request {
   // The view must be loaded before you call this method.
     // NIDASSERT([self isViewLoaded]);
-    [self view];
+  self.title = NSLocalizedString(@"Loading...", @"");
+  _titleLabel.text = self.title;
+  [self view];
   [_webView loadRequest:request];
 }
 

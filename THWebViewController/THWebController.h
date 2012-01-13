@@ -129,6 +129,7 @@
   UIWebView*        _webView;
   UIToolbar*        _toolbar;
   UIActionSheet*    _actionSheet;
+  UILabel*          _titleLabel;
   
   // Toolbar buttons
   UIBarButtonItem*  _backButton;
