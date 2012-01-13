@@ -361,6 +361,12 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request
  navigationType:(UIWebViewNavigationType)navigationType {
 
+  NSString *requestedHost = [[request mainDocumentURL] host];
+  if([requestedHost isEqualToString:@"itunes.apple.com"]) {
+    [[UIApplication sharedApplication] openURL:[request URL]];
+    return NO;
+  }
+
   [_loadingURL release];
   _loadingURL = [request.mainDocumentURL copy];
   _backButton.enabled = [_webView canGoBack];
