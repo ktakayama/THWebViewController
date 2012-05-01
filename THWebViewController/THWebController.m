@@ -279,16 +279,31 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
                                                  target: nil
                                                  action: nil] autorelease];
 
-  _toolbar.items = [NSArray arrayWithObjects:
-                    _backButton,
-                    flexibleSpace,
-                    _forwardButton,
-                    fixedSpace,
-                    flexibleSpace,
-                    _refreshButton,
-                    flexibleSpace,
-                    _actionButton,
-                    nil];
+  if (NIIsPad()) {
+     fixedSpace.width = 20;
+     _toolbar.items = [NSArray arrayWithObjects:
+                       flexibleSpace,
+                       _backButton,
+                       fixedSpace,
+                       _forwardButton,
+                       fixedSpace,
+                       _refreshButton,
+                       fixedSpace,
+                       _actionButton,
+                       fixedSpace,
+                       nil];
+  } else {
+     _toolbar.items = [NSArray arrayWithObjects:
+                       _backButton,
+                       flexibleSpace,
+                       _forwardButton,
+                       fixedSpace,
+                       flexibleSpace,
+                       _refreshButton,
+                       flexibleSpace,
+                       _actionButton,
+                       nil];
+  }
   [self.view addSubview:_toolbar];
 
   CGRect webViewFrame = NIRectContract(bounds, 0, toolbarHeight);
