@@ -476,6 +476,7 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
   if (actionSheet == _actionSheet) {
+    if (buttonIndex == actionSheet.cancelButtonIndex) return;
     if (buttonIndex == 0) {
       [[UIApplication sharedApplication] openURL:_actionSheetURL];
     } else if (buttonIndex == 1) {
