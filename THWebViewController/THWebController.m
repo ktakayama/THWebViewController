@@ -19,6 +19,7 @@
 //
 
 #import "THWebController.h"
+#import <Twitter/TWTweetComposeViewController.h>
 
 #define NI_RELEASE_SAFELY(__POINTER) { [__POINTER release]; __POINTER = nil; }
 
@@ -481,6 +482,16 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
       [[UIApplication sharedApplication] openURL:_actionSheetURL];
     } else if (buttonIndex == 1) {
       [[UIPasteboard generalPasteboard] setURL:_actionSheetURL];
+    } else if (buttonIndex == 2) {
+       TWTweetComposeViewController *tweet = [[TWTweetComposeViewController alloc] init];
+       [tweet addURL:_actionSheetURL];
+       [tweet setInitialText:[NSString stringWithFormat:@"%@ via %@", self.title,
+          [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"]]];
+       tweet.completionHandler = ^(TWTweetComposeViewControllerResult res) {
+          [self dismissModalViewControllerAnimated:YES];
+       };
+       [self presentModalViewController:tweet animated:YES];
+       [tweet release];
     }
   }
 }
@@ -544,6 +555,9 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
   if (actionSheet == _actionSheet) {
     [_actionSheet addButtonWithTitle:NSLocalizedString(@"Open in Safari", @"")];
     [_actionSheet addButtonWithTitle:NSLocalizedString(@"Copy URL", @"")];
+    if([TWTweetComposeViewController canSendTweet] && self.navigationItem.rightBarButtonItem != _activityItem) {
+      [_actionSheet addButtonWithTitle:NSLocalizedString(@"Tweet", @"")];
+    }
   }
   return YES;
 }
